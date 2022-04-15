@@ -6,6 +6,9 @@
 #include "proc.h"
 #include "defs.h"
 
+#define initProcId 1
+#define shellProcId 2
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -14,6 +17,9 @@ struct proc *initproc;
 
 int nextpid = 1;
 struct spinlock pid_lock;
+
+// this field is used for pause_system system call, in order to determine when the pause ends.
+uint pauseTicks = 0;
 
 extern void forkret(void);
 static void freeproc(struct proc *p);
@@ -447,7 +453,8 @@ scheduler(void)
 
     for(p = proc; p < &proc[NPROC]; p++) {
       acquire(&p->lock);
-      if(p->state == RUNNABLE) {
+      if(p->state == RUNNABLE & (ticks >= pauseTicks || p->pid == initProcId || p->pid == shellProcId))
+      {
         // Switch to chosen process.  It is the process's job
         // to release its lock and then reacquire it
         // before jumping back to us.
@@ -595,6 +602,32 @@ kill(int pid)
   }
   return -1;
 }
+
+
+// kill all the non init / shell / current processes, and then kill the current process
+int kill_system(void)
+{
+  struct proc * currProc = myproc();
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC]; p++)
+  {
+    if ( (p->pid != currProc->pid) & (p->pid != initProcId) & (p->pid != shellProcId))
+      if (kill(p->pid) == -1)
+        return -1;
+  }
+  return kill(currProc->pid);
+}
+
+
+// sets the ticks which needs to be surprassed in order to get through the system pause.
+int pause_system(int seconds)
+{
+  pauseTicks = ticks + (seconds * 10);
+  yield();
+  return 0;
+}
+
+
 
 // Copy to either a user address, or kernel address,
 // depending on usr_dst.
