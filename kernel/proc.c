@@ -437,19 +437,6 @@ wait(uint64 addr)
   }
 }
 
-// Per-CPU process scheduler.
-// Each CPU calls scheduler() after setting itself up.
-// Scheduler never returns.  It loops, doing:
-//  - choose a process to run.
-//  - swtch to start running that process.
-//  - eventually that process transfers control
-//    via swtch back to the scheduler.
-void
-scheduler(void)
-{
-  
-}
-
 void
 FCFSScheduler(void){
   struct proc *p;
@@ -471,7 +458,7 @@ FCFSScheduler(void){
       }
     }
     acquire(&min_p->lock);
-    while(min_p->state == RUNNABLE)
+    while((min_p->state == RUNNABLE) & (ticks >= pauseTicks || p->pid == initProcId || p->pid == shellProcId))
     {
       // Switch to chosen process.  It is the process's job
       // to release its lock and then reacquire it
@@ -529,7 +516,7 @@ SJFScheduler(void){
     int run_flag = 0;
     // save ticks before CPU burst
     s_ticks = ticks;
-    while(min_p->state == RUNNABLE)
+    while((min_p->state == RUNNABLE) & (ticks >= pauseTicks || p->pid == initProcId || p->pid == shellProcId))
     {
       run_flag = 1;
       // Switch to chosen process.  It is the process's job
@@ -564,7 +551,7 @@ defScheduler(void){
 
       for(p = proc; p < &proc[NPROC]; p++) {
         acquire(&p->lock);
-        if(p->state == RUNNABLE & (ticks >= pauseTicks || p->pid == initProcId || p->pid == shellProcId))
+        if((p->state == RUNNABLE) & (ticks >= pauseTicks || p->pid == initProcId || p->pid == shellProcId))
         {
           // Switch to chosen process.  It is the process's job
           // to release its lock and then reacquire it
@@ -580,6 +567,19 @@ defScheduler(void){
         release(&p->lock);
       }
     }
+}
+
+// Per-CPU process scheduler.
+// Each CPU calls scheduler() after setting itself up.
+// Scheduler never returns.  It loops, doing:
+//  - choose a process to run.
+//  - swtch to start running that process.
+//  - eventually that process transfers control
+//    via swtch back to the scheduler.
+void
+scheduler(void)
+{
+  defScheduler();
 }
 
 // Switch to scheduler.  Must hold only p->lock
