@@ -92,6 +92,9 @@ struct proc {
   int killed;                  // If non-zero, have been killed
   int xstate;                  // Exit status to be returned to parent's wait
   int pid;                     // Process ID
+  uint mean_ticks= 0;              // The mean of this process ticks on each of the cpu's burst
+  uint last_ticks = 0;         // Run's number of ticks in the last cpu burst
+  uint last_runnable_time;     // The global ticks value last time it state changed to runnable
 
   // wait_lock must be held when using this:
   struct proc *parent;         // Parent process
