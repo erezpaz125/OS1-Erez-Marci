@@ -95,6 +95,10 @@ struct proc {
   uint mean_ticks;             // The mean of this process ticks on each of the cpu's burst
   uint last_ticks;             // Run's number of ticks in the last cpu burst
   uint last_runnable_time;     // The global ticks value last time it state changed to runnable
+  uint sleeping_time;
+  uint runnable_time;
+  uint running_time;
+  uint state_start_ticks;      // saves the current ticks value for when the process enters a new state.
 
   // wait_lock must be held when using this:
   struct proc *parent;         // Parent process

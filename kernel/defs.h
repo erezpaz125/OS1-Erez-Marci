@@ -92,6 +92,7 @@ void            proc_freepagetable(pagetable_t, uint64);
 int             kill(int);
 int             kill_system(void);
 int             pause_system(int seconds);
+void            print_stats(void);
 struct cpu*     mycpu(void);
 struct cpu*     getmycpu(void);
 struct proc*    myproc();
