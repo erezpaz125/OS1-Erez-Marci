@@ -35,19 +35,23 @@ void example_kill_system(int interval, int loop_size) {
     }
     fprintf(1,"\n");
 }
+
+
 void env(int size, int interval, char* env_name) {
     int pid;
     int result = 1;
-    int loop_size = 10e6;
+    int loop_size = 10000000;
     int n_forks = 2;
     for (int i = 0; i < n_forks; i++) {
         pid = fork();
     }
-    for(int i = 0; i < loop_size; i++) {
-        if (i % loop_size / 10e0 == 0) 
+    
+    for(int i = 0; i < loop_size; i++) 
+    {
+        if (i % (loop_size / 10) == 0) 
         {
         	if (pid == 0) {
-        		printf("%s %i/%i completed.\n", env_name, i, loop_size);
+        		printf("%s %d/%d completed.\n", env_name, i, loop_size);
         	} else {
         		printf(" ");
         	}
@@ -57,6 +61,7 @@ void env(int size, int interval, char* env_name) {
             result = result * size;
         }
     }
+    
     printf("\n");
 }
 
@@ -71,10 +76,10 @@ void env_freq() {
 
 int main(int argc, char** argv)
 {
-    //example_pause_system(100,5,1000);
+    example_pause_system(100,5,1000);
     //example_kill_system(100,1000);
-    env_freq();
+    //env_freq();
     //env_large();
-    print_stats();
+    //print_stats();
     exit(0);
 }

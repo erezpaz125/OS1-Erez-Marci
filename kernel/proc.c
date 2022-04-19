@@ -349,7 +349,12 @@ fork(void)
   release(&wait_lock);
 
   acquire(&np->lock);
-  p->last_runnable_time = ticks;
+  // np inherits same values of running + sleeping + runnable time of parent, so we need to zero them.
+  np->running_time = 0;
+  np->sleeping_time = 0;
+  np->runnable_time = 0;
+
+  np->last_runnable_time = ticks;
   np->state_start_ticks = ticks;
   np->state = RUNNABLE;
   release(&np->lock);
@@ -417,7 +422,7 @@ exit(int status)
   runnable_processes_mean = ((runnable_processes_mean*num_exited_procs) + p->runnable_time) / (num_exited_procs + 1);
   num_exited_procs++;
   program_time = program_time + p->running_time;
-  cpu_utilization = program_time / (ticks - start_time);
+  cpu_utilization = program_time *100 / (ticks - start_time);
   release(&pid_lock);
 
   release(&wait_lock);
@@ -491,24 +496,22 @@ FCFSScheduler(void){
     struct proc *min_p=proc;
     for(p = proc; p < &proc[NPROC]; p++) 
     {
-      if(p->state == RUNNABLE && min > p->last_runnable_time){
+      if((p->state == RUNNABLE) & (min > p->last_runnable_time || min_p->state != RUNNABLE)){
         min = p->last_runnable_time;
         min_p = p;
       }
     }
-    
     acquire(&min_p->lock);
     while((min_p->state == RUNNABLE) & (ticks >= pauseTicks || min_p->pid == initProcId || min_p->pid == shellProcId))
     {
+      //printf("hello from while\n");
       // Switch to chosen process.  It is the process's job
       // to release its lock and then reacquire it
       // before jumping back to us.
       update_process_statistics(min_p);
       min_p->state = RUNNING;
       c->proc = min_p;
-      printf("checkpoint1\n");
       swtch(&c->context, &min_p->context);
-      printf("checkpoint2\n");
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       c->proc = 0;
@@ -545,7 +548,7 @@ SJFScheduler(void){
         p->last_ticks = 0;
         release(&p->lock);
 
-        if(min > p->mean_ticks)
+        if(min > p->mean_ticks || min_p->state != RUNNABLE)
         {
           min = p->mean_ticks;
           min_p = p;
@@ -632,7 +635,6 @@ scheduler(void)
   #ifdef FCFS
     FCFSScheduler();
   #endif
-  
 }
 
 // Switch to scheduler.  Must hold only p->lock
@@ -804,7 +806,7 @@ print_stats(void){
          "Sleeping Processes Mean: %d\n"
          "Runnable Processes Mean: %d\n"
          "Programm Time: %d\n"
-         "CPU Utilization: %d\n", running_processes_mean,
+         "CPU Utilization: %d%\n", running_processes_mean,
                                      sleeping_processes_mean, 
                                      runnable_processes_mean,
                                      program_time,
