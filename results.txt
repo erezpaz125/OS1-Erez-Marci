@@ -1,0 +1,92 @@
+***********************************************************************************************
+Round-Robin:
+
+Freq-environment:
+
+Running Processes Mean: {1,1,2,2,1,2,2,2,3,3}
+Sleeping Processes Mean: {0,0,0,0,0,0,0,0,0,0}
+Runnable Processes Mean: {4,4,7,7,4,7,7,7,9,7}
+Program Time: {6,6,8,8,6,8,9,9,10,9}
+CPU Utilization: {28%,20%,57%,40%,42%,34%,52%,56%,55%,69%}
+
+Large-env:
+
+Running Processes Mean: 1, 3, 3, 2, 2, 2, 2, 2, 2, 2
+Sleeping Processes Mean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+Runnable Processes Mean: 5, 9, 9, 7, 7, 7, 7, 7, 7, 7
+Programm Time: 9, 10, 9, 9, 9, 9, 9, 9, 9, 9
+CPU Utilization: 13%, 60%, 55%, 56%, 56%, 56%, 56%, 56%, 56%, 56%
+
+***********************************************************************************************
+
+FCFS - 
+
+Freq-env:
+
+Running Processes Mean: {2,2,3,2,2,2,2,2,2,3}
+Sleeping Processes Mean: {0,0,0,0,0,0,0,0,0,0}
+Runnable Processes Mean: {2,2,3,2,2,2,2,2,2,3}
+Programm Time: {8,9,12,7,8,9,8,7,8,10}
+CPU Utilization: {80%,81%,85%,77%,80%,75%,80%,70%,80%,83%}
+
+Large-env:
+
+Running Processes Mean: 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+Sleeping Processes Mean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+Runnable Processes Mean: 2, 2, 2, 2, 4, 2, 3, 3, 2, 2
+Programm Time: 10, 11, 10, 11, 12, 11, 11, 12, 12, 9
+CPU Utilization: 83%, 84%, 76%, 84%, 80%, 84%, 84%, 85%, 85%, 81%
+
+***********************************************************************************************
+
+SJF - 
+
+Freq-env:
+
+Running Processes Mean: {3,3,2,2,2,2,3,3,2,2}
+Sleeping Processes Mean: {0,0,0,0,0,0,0,0,0,0}
+Runnable Processes Mean: {1,1,1,1,1,1,1,1,1,1}
+Programm Time: {11,10,8,8,8,9,10,10,8,9}
+CPU Utilization: {84%,83%,72%,80%,80%,81%,76%,83%,80%,81%}
+
+Large-env:
+
+Running Processes Mean: 3, 5, 6, 2, 2, 2, 2, 2, 2, 2
+Sleeping Processes Mean: 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+Runnable Processes Mean: 1, 3, 3, 1, 1, 1, 1, 1, 1, 1
+Programm Time: 10, 18, 20, 8, 8, 8, 8, 8, 7, 8
+CPU Utilization: 83%, 85%, 83%, 80%, 80%, 80%, 80% , 72%, 70%, 80%
+
+***********************************************************************************************
+
+Means and standard errors - 
+                                        Mean                    Standard error   
+                                Freq-Env    Large-Env       Freq-Env    Large-Env
+Round-Robin:
+    Running Processes Mean:     1.9         2.1             0.2333      0.1795
+    Sleeping Processes Mean:    0           0               0           0
+    Runnable Processes Mean:    6.3         7.2		        0.5385      0.395013
+    Programm Time:              7.9         9.1             0.4582      1.00001
+    CPU Utilization:            45.3%       52%             4.782       4.124
+
+FCFS:
+    Running Processes Mean:     2.2         3               0.1333
+    Sleeping Processes Mean:    0           0               0           0
+    Runnable Processes Mean:    2.2         2.4             0.1333      0.6992
+    Programm Time:              8.6         10.9            0.476       0.3144
+    CPU Utilization:            79.1%       82.6%           1.337       0.0896
+
+SJF:
+    Running Processes Mean:     2.4         2.8             0.1633      0.4666
+    Sleeping Processes Mean:    0           0               0           0
+    Runnable Processes Mean:    1           1.4             0           0.2666
+    Programm Time:              9.1         10.3            0.348       1.4761
+    CPU Utilization:            80%         79.3%           1.1353      1.4985
+
+
+
+
+
+
+
+

@@ -77,9 +77,11 @@ void env_freq() {
 int main(int argc, char** argv)
 {
     //example_pause_system(100,5,1000);
-    //example_kill_system(100,1000);
-    env_freq();
+    example_kill_system(100,1000);
+    //env_freq();
     //env_large();
-    print_stats();
+    //print_stats();
     exit(0);
 }
+
+
